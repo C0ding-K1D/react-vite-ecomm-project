@@ -2,6 +2,8 @@ import { Fragment, useState } from "react";
 import { Outlet, Link } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { logout } from "../../store/store";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -26,6 +28,7 @@ function NavBar() {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const userData = useSelector((state) => state.auth.userData);
+  const dispatch = useDispatch();
 
   console.log(userData);
   const theme = useTheme();
@@ -44,6 +47,10 @@ function NavBar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  //   const handleLogOut = () => {
+  //     dispatch(logout());
+  //   };
 
   return (
     <Fragment>
@@ -166,11 +173,31 @@ function NavBar() {
                   open={Boolean(anchorElUser)}
                   onClose={handleCloseUserMenu}
                 >
-                  {settings.map((setting) => (
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                      <Typography textAlign="center">{setting}</Typography>
-                    </MenuItem>
-                  ))}
+                  {settings.map((setting) => {
+                    if (setting === "Logout") {
+                      return (
+                        <MenuItem
+                          key={setting}
+                          id={setting}
+                          onClick={() => {
+                            dispatch(logout());
+                          }}
+                        >
+                          <Typography textAlign="center">Logout</Typography>
+                        </MenuItem>
+                      );
+                    } else {
+                      return (
+                        <MenuItem
+                          key={setting}
+                          id={setting}
+                          onClick={handleCloseUserMenu}
+                        >
+                          <Typography textAlign="center">{setting}</Typography>
+                        </MenuItem>
+                      );
+                    }
+                  })}
                 </Menu>
               </Box>
               <Cart />

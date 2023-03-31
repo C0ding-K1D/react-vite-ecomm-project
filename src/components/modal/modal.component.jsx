@@ -35,7 +35,6 @@ const BasicModal = () => {
     const { user } = await signInWithGoogle();
     if (user) {
       const userDocRef = await createUserProfileDocument(user);
-      console.log(user);
       const userData = {
         name: user.displayName,
         email: user.email,
